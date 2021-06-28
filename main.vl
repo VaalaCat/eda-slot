@@ -10,7 +10,7 @@ module main(
 	input rst_n,
 
 	output reg flash,
-	output reg [3:0] select,
+	output wire [3:0] select,
 	output reg [6:0] led
 
 );
@@ -23,6 +23,7 @@ reg [15:0] scanCnt;
 reg [3:0] dispNum;
 reg [18:0] normalSeed;//记录停止前的时间
 reg [18:0] cheatSeed;//作弊信号的记录时间
+reg [3:0] preSelect;
 wire [6:0] ledNum;
 
 wire [25:0] clk_cnt1, clk_cnt2, clk_cnt3;
@@ -40,15 +41,15 @@ end
 
 always @(posedge clk or negedge rst_n) begin
 	if (rst_n ==1'b0) 
-		select <= 4'b0001;
-	else if ( scanCnt[15:14] == 0 )
-		select <= 4'b0001;
-	else if ( scanCnt[15:14] == 1 )
-		select <= 4'b0010;
-	else if ( scanCnt[15:14] == 2 )
-		select <= 4'b0100;
-	else if ( scanCnt[15:14] == 3 )
-		select <= 4'b1000;		 
+		preSelect <= 4'b0001;
+	else if ( scanCnt[15:14] == 2'b00 )
+		preSelect <= 4'b0001;
+	else if ( scanCnt[15:14] == 2'b01 )
+		preSelect <= 4'b0010;
+	else if ( scanCnt[15:14] == 2'b10 )
+		preSelect <= 4'b0100;
+	else if ( scanCnt[15:14] == 2'b11 )
+		preSelect <= 4'b1000;		 
 	else;
 end
 
@@ -106,5 +107,10 @@ trans t(dispNum, ledNum);
 always @(*) begin
 	led <= ~ledNum;
 end
+
+assign select[3] = ~( preSelect[3] == 4'b0001 );//同段选信号，将位选信号置反
+assign select[2] = ~( preSelect[2] == 4'b0010 );
+assign select[1] = ~( preSelect[1] == 4'b0100 );
+assign select[0] = ~( preSelect[0] == 4'b1000 );
 
 endmodule

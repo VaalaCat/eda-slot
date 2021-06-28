@@ -22,7 +22,7 @@ initial begin
 
 	#100000 rst_n <= 1;
 	#100000 start <= 1;
-	#600000 start <= 0;
+	#3000000 start <= 0;
 	
 	#700000 $finish;
 end
