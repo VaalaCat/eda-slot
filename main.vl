@@ -91,12 +91,12 @@ always @(posedge clk or negedge rst_n) begin //对t1，t2，t3进行判断，如
 	end
 end
 
-always @(select) begin //根据位选信号将不同输出赋给不同的数码管
-	if ( select == 4'b0001 ) 
+always @(preSelect) begin //根据位选信号将不同输出赋给不同的数码管
+	if ( preSelect == 4'b0001 ) 
 		dispNum = showNum0;
-	else if ( select == 4'b0010 ) 
+	else if ( preSelect == 4'b0010 ) 
 		dispNum = showNum1;
-	else if ( select == 4'b0100 ) 
+	else if ( preSelect == 4'b0100 ) 
 		dispNum = showNum2;
 	else 
 		dispNum = 8;
