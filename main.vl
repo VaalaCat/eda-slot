@@ -108,9 +108,9 @@ always @(*) begin
 	led <= ~ledNum;
 end
 
-assign select[3] = ~( preSelect[3] == 4'b0001 );//同段选信号，将位选信号置反
-assign select[2] = ~( preSelect[2] == 4'b0010 );
-assign select[1] = ~( preSelect[1] == 4'b0100 );
-assign select[0] = ~( preSelect[0] == 4'b1000 );
+assign select[0] = ~( preSelect == 4'b0001 );//同段选信号，将位选信号置反
+assign select[1] = ~( preSelect == 4'b0010 );
+assign select[2] = ~( preSelect == 4'b0100 );
+assign select[3] = ~( preSelect == 4'b1000 );
 
 endmodule
