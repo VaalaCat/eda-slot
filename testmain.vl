@@ -1,0 +1,45 @@
+`timescale 1ns/1ns
+`include "main.vl"
+
+module testmain;
+	reg clk;
+	reg cheat;
+	reg start;
+	reg rst;
+	wire [6:0] led;
+	wire [3:0] select;
+
+	initial begin
+		$dumpfile("testmain.vcd");
+		$dumpvars(0, testmain);
+		clk <= 0;
+		start <= 0;
+		rst <= 0;
+		#100 rst <= 1;
+		#100 rst <= 0;
+		#20 cheat <= 0;
+		#40 cheat <= 1;
+		#80 cheat <= 0;
+		#100 start <= 1;
+		#500 start <= 0;
+		#600 rst <= 1;
+		#20 rst <= 0;
+		#500 start <= 1;
+		#500 start <= 0;
+		#4000 $finish;
+	end
+
+	always begin
+		#20 clk <= !clk;
+	end
+
+	main m(
+		clk,
+		cheat,
+		start,
+		rst,
+		led,
+		select
+	);
+
+endmodule

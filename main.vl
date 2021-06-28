@@ -1,0 +1,81 @@
+`timescale 1ns/1ns
+`include "rand.vl"
+`include "four_num_led.vl"
+`include "cut.vl"
+
+module main(
+	input clk,
+	input cheat,
+	input start,
+	input rst,
+	output [6:0] led,
+	output [3:0] select
+);
+
+reg cheatFlag = 0;
+reg endFlag = 0;
+reg startFlag = 0;
+
+reg load;
+reg gnd = 0;
+reg [15:0] seed = 0;
+reg [15:0] realNum;
+reg [15:0] showNum;
+wire [15:0] cutNum;
+wire [15:0] nowNum;
+
+initial begin
+	load <= 0;
+	seed = 16'b1111_1111_1111_1111;
+	load <= 1;
+	#40 load <= 0;
+end
+
+always @(posedge clk or negedge rst) begin
+
+	if(rst) begin
+		cheatFlag <= 0;
+		endFlag <= 0;
+		showNum <= 0;
+		startFlag <= 0;
+		#20 realNum <= cutNum;
+	end
+	else if (cheat) begin
+		cheatFlag <= 1;
+	end
+	else if (start) begin
+		showNum <= cutNum;
+		startFlag <= 1;
+	end
+	else if (endFlag) begin
+		if (cheatFlag)
+			showNum <= realNum;
+		else begin
+			if (realNum[3:0] == realNum[7:5] && realNum[11:8] == realNum[7:5])
+				showNum <= realNum;
+			else
+				showNum <= realNum;
+		end
+	end
+	else if (!start && startFlag) begin
+		endFlag <= 1;
+	end
+	else begin
+		showNum <= 0;
+	end
+end
+
+rand r(gnd, clk, load, seed, nowNum);
+cut c(nowNum, cutNum);
+four_num_led f(
+	clk,
+	rst,
+	showNum[3:0],
+	showNum[7:4],
+	showNum[11:8],
+	showNum[15:12],
+	led,
+	select
+);
+
+endmodule

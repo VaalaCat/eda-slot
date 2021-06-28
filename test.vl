@@ -1,0 +1,30 @@
+`timescale 1ns/1ns
+`include "three_num_led.vl"
+
+module test;
+
+reg [3:0] a1;
+reg [3:0] a2;
+reg [3:0] a3;
+wire [6:0] b1;
+wire [6:0] b2;
+wire [6:0] b3;
+reg clk;
+
+initial begin
+    a1 <= 9;
+    a2 <= 8;
+    a3 <= 7;
+    clk <= 0;
+    $dumpfile("test.vcd");
+    $dumpvars(0,test);
+    #6000 $finish;
+end
+
+always begin
+    #20 clk <= !clk;
+end
+
+three_num_led t(clk,clk,a1,a2,a3,b1,b2,b3);
+
+endmodule

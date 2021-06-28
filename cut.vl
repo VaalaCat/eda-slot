@@ -1,0 +1,8 @@
+module cut(
+	input [15:0] originNum,
+	output [15:0] outputNum
+);
+
+assign outputNum = {{1'b0, originNum[14:12]}, {1'b0, originNum[10:8]}, {1'b0, originNum[6:4]}, {1'b0, originNum[2:0]}};
+
+endmodule

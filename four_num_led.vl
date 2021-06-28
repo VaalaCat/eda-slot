@@ -1,0 +1,55 @@
+`include "trans.vl"
+
+module four_num_led(
+	input clk,
+	input rst,
+	input [3:0] inputNum0,
+	input [3:0] inputNum1,
+	input [3:0] inputNum2,
+	input [3:0] inputNum3,
+	output reg [6:0] led,
+	output reg [3:0] select
+);
+
+wire [6:0] wireNum0;
+wire [6:0] wireNum1;
+wire [6:0] wireNum2;
+wire [6:0] wireNum3;
+
+trans t0(inputNum0, wireNum0);
+trans t1(inputNum1, wireNum1);
+trans t2(inputNum2, wireNum2);
+trans t3(inputNum3, wireNum3);
+
+reg [1:0] cnt = 0;
+
+always @(posedge clk or posedge rst) begin
+	cnt <= cnt+1;
+	if (rst) begin
+		select <= 4'b0001;
+		led <= 0;
+		cnt <= 0;
+	end
+	else begin
+		case (cnt)
+			0: begin
+				select <= 4'b0001;
+				led <= wireNum0;
+			end
+			1: begin
+				select <= 4'b0010;
+				led <= wireNum1;
+			end
+			2: begin
+				select <= 4'b0100;
+				led <= wireNum2;
+			end
+			3: begin
+				select <= 4'b1000;
+				led <= 0;
+			end
+		endcase
+	end
+end
+
+endmodule

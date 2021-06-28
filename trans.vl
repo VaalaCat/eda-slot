@@ -1,0 +1,28 @@
+module trans(
+	input [3:0] originNum,
+	output reg [6:0] ledPort
+);
+
+parameter NUM0 = 7'h40,
+          NUM1 = 7'h79,
+          NUM2 = 7'h24,
+          NUM3 = 7'h30,
+          NUM4 = 7'h19,
+          NUM5 = 7'h12,
+          NUM6 = 7'h02,
+          NUM7 = 7'h78;
+
+always @(*) begin
+	case (originNum)
+		0 : ledPort <= NUM0;
+        1 : ledPort <= NUM1;
+        2 : ledPort <= NUM2;
+        3 : ledPort <= NUM3;
+        4 : ledPort <= NUM4;
+        5 : ledPort <= NUM5;
+        6 : ledPort <= NUM6;
+        7 : ledPort <= NUM7;
+    endcase
+end
+
+endmodule
